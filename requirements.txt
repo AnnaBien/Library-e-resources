@@ -1,2 +1,7 @@
-selenium
+functions-framework==3.*
+selenium~=4.25.0
 webdriver_manager
+google~=3.0.0
+google-cloud-logging
+flask~=3.0.3
+SQLAlchemy~=2.0.36
