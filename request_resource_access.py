@@ -166,9 +166,9 @@ class RequestResourceAccess:
         self.logger.info('Form successfully filled with data!')
         self.save_screenshot()
 
-    def _send_form_and_validate(self):
+    def _submit_form(self):
         """
-        Submit your form and check the response page. Save a screenshot.
+        Submit your form and save a screenshot of the response page.
         :return:
         """
 
@@ -178,7 +178,6 @@ class RequestResourceAccess:
         submit_button.click()
         self.save_screenshot()
         self.logger.info('Form was submitted successfully!')
-        # TODO: Validate
 
     def fill_form_and_send(self, form_data):
         """
@@ -189,4 +188,4 @@ class RequestResourceAccess:
 
         self._go_to_form()
         self._fill_form(form_data)
-        self._send_form_and_validate()
+        self._submit_form()
