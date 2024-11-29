@@ -61,7 +61,7 @@ At the end the last function is invoked to delete the container.
 ## Running on localhost
 
 If you do not feel fancy enough to use Google Cloud, run this code on your localhost. 
-Only make sure you have the Chrome browser already installed or preferably  run [selenium/standalone-chrome](https://hub.docker.com/r/selenium/standalone-chrome) container beforehand.
+Only make sure you have the Chrome browser already installed or preferably  run [selenium/standalone-chrome](https://hub.docker.com/r/selenium/standalone-chrome) container on port 4444.
 
 Firstly prepare your environment:
 ```bash
@@ -89,8 +89,10 @@ user_data = [
         'resource_type': EResourceType.empikgo
     }
 ]
-resource_request_instance = RequestResourceAccess(cmd_exec_url='localhost:4444')
+resource_request_instance = RequestResourceAccess(cmd_exec_url='http://127.0.0.1:4444')
 resource_request_instance.wait_until_form_is_available()  # you may want to extend the waiting time
 resource_request_instance.fill_form_and_send(user_data)
 
 ```
+
+Note! Application will raise a RequestNotSend exception while the online form is not available.
