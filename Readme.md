@@ -54,8 +54,8 @@ Removes the standalone-chrome container when the Selenium application finishes i
 ### Cloud Scheduler
 
 Scheduler is used to invoke Cloud Run Functions by sending HTTP GET request at certain URLs.
-Application is scheduled to deploy a container at 11:55 PM the last day of the month. 
-Next at 12.01 AM (6 minutes later) Cloud Scheduler sends an HTTP request that triggers the application.
+Application is scheduled to deploy a container at 12.00 AM the first day of the month. 
+Next at 12.03 AM Cloud Scheduler sends an HTTP request that triggers the application.
 At the end the last function is invoked to delete the container.
 
 ## Running on localhost
