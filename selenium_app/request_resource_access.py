@@ -6,6 +6,7 @@ from selenium import webdriver
 from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import WebDriverException
 
 from logger import create_logger
 
@@ -13,7 +14,7 @@ from logger import create_logger
 class RequestNotSend(Exception):
     def __init__(self):
         self.logger = create_logger(name=self.__class__.__name__, level='error')
-        self.logger.exception('Task has failed')
+        self.logger.exception('Form submission failed')
 
 
 class PageNotAvailable(Exception):
@@ -30,10 +31,16 @@ class RequestResourceAccess:
     The form needs to be sent every first day of the month.
     """
 
-    def __init__(self):
+    def __init__(self, cmd_exec_url=None):
         self.logger = create_logger(self.__class__.__name__, level='debug')
         self.library_url = 'https://www.rajska.info/aktualnosci'
-        self.driver = webdriver.Remote(command_executor='<standalone-chrome-container-address>', options=Options())
+        cmd_exec_url = cmd_exec_url if cmd_exec_url is not None \
+            else '<standalone-chrome-container-url>'
+        try:
+            self.driver = webdriver.Remote(command_executor=cmd_exec_url, options=Options())
+        except WebDriverException as webdriver_exception:
+            self.logger.error('Could not initialize Selenium Webdriver. Check the connection with command executor.')
+            raise RequestNotSend from webdriver_exception
 
     def save_screenshot(self):
         """
@@ -73,13 +80,14 @@ class RequestResourceAccess:
         self.driver.get(site_address)
         try:
             self.driver.find_element(by=By.CLASS_NAME, value='error')
+            self.driver.quit()
+            raise PageNotAvailable(site_address)
         except NoSuchElementException:
             self.logger.info(f'Moved to site: {site_address}')
-            return
-        self.driver.quit()
-        raise RequestNotSend from PageNotAvailable(site_address)
+        except PageNotAvailable as page_not_aval:
+            raise RequestNotSend from page_not_aval
 
-    def wait_until_form_is_available(self, counter: int = 1, duration: int = 5):
+    def wait_until_form_is_available(self, counter: int = 2, duration: int = 5):
         """
         Wait until the form becomes available on the library website.
 
@@ -99,7 +107,7 @@ class RequestResourceAccess:
                 counter -= 1
                 time.sleep(duration)
         else:
-            self.logger.error('The link to the form cannot be found.')
+            self.logger.error('Timer expired. The form is unavailable!')
             self.driver.quit()
             raise RequestNotSend
         self.logger.info('The form is available!')
