@@ -60,8 +60,10 @@ At the end the last function is invoked to delete the container.
 
 ## Running on localhost
 
-If you do not feel fancy enough to use Google Cloud, run this code on your localhost. 
-Only make sure you have the Chrome browser already installed or preferably  run [selenium/standalone-chrome](https://hub.docker.com/r/selenium/standalone-chrome) container on port 4444.
+If you do not feel fancy enough to use Google Cloud, run this code on your localhost.
+Only make sure you have the Chrome browser already installed or preferably run a selenium/standalone-chrome container.
+Check [selenium/standalone-chrome dockerhub page](https://hub.docker.com/r/selenium/standalone-chrome) for instructions how to run a container.
+
 
 Firstly prepare your environment:
 ```bash
