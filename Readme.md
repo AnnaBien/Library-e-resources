@@ -86,7 +86,7 @@ user_data = [
     {
         'library_card_no': '213721',
         'email': 'example@gmail.com',
-        'resource_type': EResourceType.empikgo
+        'resource_type': EResourceType.empikgo.value
     }
 ]
 resource_request_instance = RequestResourceAccess(cmd_exec_url='http://127.0.0.1:4444')

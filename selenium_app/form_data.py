@@ -14,7 +14,7 @@ form_data = [
             'name': 'Anna',
             'library_card_no': '213721',
             'email': 'example@gmail.com',
-            'resource_type': EResourceType.empikgo
+            'resource_type': EResourceType.empikgo.value
         }
     ]
 
