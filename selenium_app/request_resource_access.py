@@ -100,7 +100,7 @@ class RequestResourceAccess:
         while counter > 0:
             try:
                 self.driver.refresh()
-                self.driver.find_element(by=By.LINK_TEXT, value='E-Zasoby')  # TODO: Check whether it is valid
+                self.driver.find_element(by=By.PARTIAL_LINK_TEXT, value='E-czytanie')
                 break
             except NoSuchElementException:
                 self.logger.warning(f'The form is still unavailable, waiting {duration}s to retry...')
@@ -150,29 +150,33 @@ class RequestResourceAccess:
         :return: None
         """
 
-        card_no_input = self._find_element_by_xpath(
-            xpath='//div[contains(.//span, "Numer karty czytelnika WBP w Krakowie:")]//input[@type="text"]'
-        )
-        self.logger.debug('Found the input element for the library card number')
-        card_no_input.send_keys(form_data['library_card_no'])
-        self.logger.info('Successfully entered library card number')
+        try:
+            card_no_input = self._find_element_by_xpath(
+                xpath='//div[contains(.//span, "Numer karty czytelnika WBP w Krakowie:")]//input[@type="text"]'
+            )
+            self.logger.debug('Found the input element for the library card number')
+            card_no_input.send_keys(form_data['library_card_no'])
+            self.logger.info('Successfully entered library card number')
 
-        email_input = self._find_element_by_xpath(
-            xpath='//div[contains(.//span, "Adres poczty elektronicznej do korespondencji:")]//input[@type="text"]'
-        )
-        self.logger.debug('Found the input element for e mail address')
-        email_input.send_keys(form_data['email'])
-        self.logger.info('Successfully entered email address')
+            email_input = self._find_element_by_xpath(
+                xpath='//div[contains(.//span, "Adres poczty elektronicznej do korespondencji:")]//input[@type="text"]'
+            )
+            self.logger.debug('Found the input element for e mail address')
+            email_input.send_keys(form_data['email'])
+            self.logger.info('Successfully entered email address')
 
-        e_resource_checkbox = self._find_element_by_xpath(
-            xpath=f'//div[contains(@data-value, "{form_data['resource_type']}")]'
-        )
-        self.logger.debug('Found checkbox for e-resource type')
-        e_resource_checkbox.click()
-        self.logger.info(f'Selected e-resource type: {form_data['resource_type']}')
+            e_resource_checkbox = self._find_element_by_xpath(
+                xpath=f'//div[contains(@data-value, "{form_data['resource_type']}")]'
+            )
+            self.logger.debug('Found checkbox for e-resource type')
+            e_resource_checkbox.click()
+            self.logger.info(f'Selected e-resource type: {form_data['resource_type']}')
 
-        self.logger.info('Form successfully filled with data!')
-        self.save_screenshot()
+            self.logger.info('Form successfully filled with data!')
+            self.save_screenshot()
+        except WebDriverException as driver_exception:
+            self.driver.quit()
+            raise RequestNotSend from driver_exception
 
     def _submit_form(self):
         """
@@ -186,6 +190,7 @@ class RequestResourceAccess:
         submit_button.click()
         self.save_screenshot()
         self.logger.info('Form was submitted successfully!')
+        self.driver.quit()
 
     def fill_form_and_send(self, form_data):
         """
