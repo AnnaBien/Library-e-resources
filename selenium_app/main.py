@@ -15,13 +15,9 @@ def selenium_client(*args):
     resource_request_instance = RequestResourceAccess()
     try:
         resource_request_instance.wait_until_form_is_available()
-        while True:
-            try:
-                user_data = get_next_user_data()
-                logger.info(f'Filling out form with user data: {user_data['name']}')
-                resource_request_instance.fill_form_and_send(user_data)
-            except StopIteration:
-                break
+        for user_data in get_next_user_data():
+            logger.info(f'Filling out form with user data: {user_data}')
+            resource_request_instance.fill_form_and_send(user_data)
         response.status_code = 200
         response.response = 'Form submitted successfully.'
     except RequestNotSend:
