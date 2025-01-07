@@ -58,6 +58,8 @@ Application is scheduled to deploy a container at 12.00 AM the first day of the 
 Next at 12.03 AM Cloud Scheduler sends an HTTP request that triggers the application.
 At the end the last function is invoked to delete the container.
 
+Ingress traffic is limited to internal only for each Cloud Run Function.
+
 ## Running on localhost
 
 If you do not feel fancy enough to use Google Cloud, run this code on your localhost.
