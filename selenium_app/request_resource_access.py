@@ -123,7 +123,7 @@ class RequestResourceAccess:
 
         self._go_to_site_if_available('https://www.rajska.info/pobierz-kody-kolejne-platformy-czekaja')
         try:
-            href_elem = self.driver.find_element(by=By.LINK_TEXT, value='formularz zgłoszeniowy')
+            href_elem = self.driver.find_element(by=By.LINK_TEXT, value='formularz kontaktowy')
             href_elem.click()
         except NoSuchElementException as link_not_found:
             self.logger.error('The link to the form cannot be found.')
